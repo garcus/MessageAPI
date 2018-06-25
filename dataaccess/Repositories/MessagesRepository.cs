@@ -35,13 +35,14 @@ namespace Messages.DataAccess.Repositories
                 .OrderBy(m => m.Title);
         }
 
-        public void Add(Message msg)
+        public Message Add(Message msg)
         {
             _context.Messages.Add(msg);
             _context.SaveChanges();
+            return msg;
         }
 
-        public void Update(long id, Message msg)
+        public Message Update(long id, Message msg)
         {
             var m = _context.Messages.Find(id);
             if (m == null)
@@ -50,6 +51,7 @@ namespace Messages.DataAccess.Repositories
             m.Body = msg.Body;
             _context.Messages.Update(m);
             _context.SaveChanges();
+            return m;
         }
 
         public void Delete(long id)
