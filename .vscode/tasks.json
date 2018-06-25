@@ -10,6 +10,16 @@
                 "${workspaceFolder}/api/api.csproj"
             ],
             "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "test",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "test",
+                "${workspaceFolder}/test/test.csproj"
+            ],
+            "problemMatcher": "$msCompile"
         }
     ]
 }
