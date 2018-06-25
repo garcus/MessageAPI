@@ -7,6 +7,7 @@ using Messages.DataAccess.Repositories;
 namespace Messages.Controllers
 {
     [Route("api/[controller]")]
+    [ApiController]
     public class MessagesController : Controller
     {
         private readonly MessagesRepository _msgRepo;
@@ -18,7 +19,7 @@ namespace Messages.Controllers
 
         #region GET api/messages
         [HttpGet]
-        public IEnumerable<Message> Get()
+        public IEnumerable<Message> GetAll()
         {
             return _msgRepo.GetAll();
         }
@@ -26,35 +27,62 @@ namespace Messages.Controllers
 
         #region GET api/messages/{id}
         [HttpGet("{id}")]
-        [ProducesResponseType(200, Type = typeof(Message))]
-        [ProducesResponseType(404)]
-        public IActionResult Get(int id)
+        public ActionResult<Message> GetById(long id)
         {
-            var msg = _msgRepo.Get(id);
-            if (msg == null)
+            Message msg = null;
+            try
+            {
+                msg = _msgRepo.Get(id);
+            }
+            catch (MessageNotFoundException)
+            {
                 return NotFound();
-            return Ok(msg);
+            }
+           return msg;
         }
         #endregion
 
         #region POST api/messages
         [HttpPost]
-        public void Post([FromBody]string value)
+        public IActionResult Create([FromBody] Message msg)
         {
+            if (msg == null || !ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            _msgRepo.Add(msg);
+            return CreatedAtAction(nameof(GetById), new { id = msg.Id }, msg);
         }
         #endregion
 
         #region PUT api/messages/{id}
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
+        public IActionResult Update(long id, [FromBody] Message msg)
         {
-        }
+            try
+            {
+                _msgRepo.Update(id, msg);
+            }
+            catch (MessageNotFoundException)
+            {
+                return NotFound();
+            }
+            return NoContent();
+       }
         #endregion
 
         #region DELETE api/messages/{id}
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public IActionResult Delete(long id)
         {
+            try
+            {
+                _msgRepo.Delete(id);
+            }
+            catch (MessageNotFoundException)
+            {
+                return NotFound();
+            }
+            return NoContent();
         }
         #endregion
     }

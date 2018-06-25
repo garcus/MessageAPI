@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -33,7 +35,7 @@ namespace Messages
             _conn.Open();
             services.AddDbContext<MessagesContext>(options => { options.UseSqlite(_conn); });
             services.AddScoped<MessagesRepository>();
-            services.AddMvc();
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -43,12 +45,19 @@ namespace Messages
             {
                 app.UseDeveloperExceptionPage();
             }
+            else 
+            {
+                app.UseExceptionHandler("/Error");
+                app.UseHsts();
+            }
+
             // Setup context
             using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
             {
                 var context = serviceScope.ServiceProvider.GetRequiredService<MessagesContext>();
                 context.Database.EnsureCreated();
             }
+            app.UseHttpsRedirection();
             app.UseMvc();
         }
     }
