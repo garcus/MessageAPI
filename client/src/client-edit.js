@@ -26,7 +26,7 @@ class ClientEdit extends PolymerElement {
       <iron-ajax id="ajax"
         headers="{'X-Requested-With': 'XMLHttpRequest', 'Access-Control-Allow-Origin': '*'}"
         content-type="application/json"
-        on-response="handleResponse"
+        handle-as="json"
         loading="{{loading}}">
       </iron-ajax>
 
@@ -48,6 +48,7 @@ class ClientEdit extends PolymerElement {
         <div class="buttons">
           <paper-button on-tap="abort">Abort</paper-button>
           <paper-button on-tap="save">Save</paper-button>
+          <paper-button on-tap="delete">Delete</paper-button>
         </div>
       </div>
     `;
@@ -66,15 +67,40 @@ class ClientEdit extends PolymerElement {
 
   routeActivated() {
     this.$.ajax.url = ClientGlobals.api + 'api/messages/' + this.messageId;
-    this.$.ajax.generateRequest();
-  }
-
-  handleResponse(e) {
-    this.set('message', e.detail.response);
+    this.$.ajax.method = 'GET';
+    this.$.ajax.body = '';
+    var _this = this;
+    var req = this.$.ajax.generateRequest().completes;
+    req.then(function(data) {
+      _this.set('message', data.response);
+    });
   }
 
   save() {
     if(!this.$.form.validate()) { return; }
+    this.$.ajax.url = ClientGlobals.api + 'api/messages/' + this.messageId;
+    this.$.ajax.method = 'PUT';
+    this.$.ajax.body = JSON.stringify(this.message);
+    var _this = this;
+    var req = this.$.ajax.generateRequest().completes;
+    req.then(function(data) {
+      _this.dispatchEvent(new CustomEvent('refresh-list', 
+        { detail: { message: 'Message saved'}}));
+      _this.abort();
+    });
+  }
+
+  delete() {
+    this.$.ajax.url = ClientGlobals.api + 'api/messages/' + this.messageId;
+    this.$.ajax.method = 'DELETE';
+    this.$.ajax.body = ''
+    var _this = this;
+    var req = this.$.ajax.generateRequest().completes;
+    req.then(function(data) {
+      _this.dispatchEvent(new CustomEvent('refresh-list',
+        { detail: { message: 'Message deleted'}}));
+      _this.abort();
+    });
   }
 
   abort() {

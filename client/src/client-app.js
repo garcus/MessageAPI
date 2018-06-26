@@ -5,6 +5,7 @@ import '@polymer/app-route/app-route.js';
 import '@polymer/app-layout/app-toolbar/app-toolbar.js';
 import '@polymer/app-layout/app-header/app-header.js';
 import '@polymer/iron-pages/iron-pages.js';
+import '@polymer/paper-toast/paper-toast.js';
 
 // Gesture events like tap and track generated from touch will not be
 // preventable, allowing for better scrolling performance.
@@ -49,10 +50,11 @@ class ClientApp extends PolymerElement {
       </app-header>
 
       <iron-pages selected="[[page]]" attr-for-selected="id" role="main">
-        <client-list id="list" on-new-message="new" on-edit-message="edit"></client-list>
-        <client-new id="new" name="new"></client-new>
-        <client-edit id="edit" message-id="[[subrouteData.messageId]]"></client-edit>
+        <client-list id="list"></client-list>
+        <client-new id="new" on-refresh-list="refresh"></client-new>
+        <client-edit id="edit" message-id="[[subrouteData.messageId]]" on-refresh-list="refresh"></client-edit>
       </iron-pages>
+      <paper-toast id="toast" text="[[toastMsg]]"></paper-toast>
     `;
   }
 
@@ -66,7 +68,8 @@ class ClientApp extends PolymerElement {
       messageId: String,
       routeData: Object,
       subrouteData: Object,
-      subroute: Object
+      subroute: Object,
+      toastMsg: String
     };
   }
 
@@ -115,8 +118,12 @@ class ClientApp extends PolymerElement {
     this.set('page', 'new');
   }
 
-  editMsg(e) {
-
+  refresh(e) {
+    this.$.list.refresh();
+    if (typeof(e.detail.message) !== 'undefined') {
+      this.set('toastMsg', e.detail.message);
+      this.$.toast.open();
+    }
   }
 }
 

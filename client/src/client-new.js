@@ -16,6 +16,14 @@ class ClientNew extends PolymerElement {
         }
       </style>
 
+      <iron-ajax id="ajax"
+        method="POST"
+        headers="{'X-Requested-With': 'XMLHttpRequest', 'Access-Control-Allow-Origin': '*'}"
+        handle-as="json"
+        content-type="application/json"
+        on-response="handleResponse"
+        loading="{{loading}}">
+      </iron-ajax>
 
       <div class="card">
         <h2>Compose new message</h2>
@@ -52,6 +60,15 @@ class ClientNew extends PolymerElement {
 
   send() {
     if(!this.$.form.validate()) { return; }
+    this.$.ajax.url = ClientGlobals.api + 'api/messages';
+    this.$.ajax.body = JSON.stringify(this.message);
+    var _this = this;
+    var req = this.$.ajax.generateRequest().completes;
+    req.then(function(data) {
+      _this.dispatchEvent(new CustomEvent('refresh-list',
+        { detail: { message: 'Message sent'}}));
+      _this.abort();
+    });
   }
 
   abort() {
