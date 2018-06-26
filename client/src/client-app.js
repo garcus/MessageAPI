@@ -24,18 +24,23 @@ class ClientApp extends PolymerElement {
     return html`
       <style>
       :host {
-        --app-primary-color: #f49242;
-        --app-secondary-color: black;
+        --primary-color:        #4CAF50;
+        --secondary-color:      #388E3C;
+        --dark-primary-color:       #388E3C;
+        --default-primary-color:    #4CAF50;
+        --light-primary-color:      #C8E6C9;
+        --text-primary-color:       #FFFFFF;
+        --accent-color:             #FF5722;
+        --primary-background-color: #C8E6C9;
+        --primary-text-color:       #212121;
+        --secondary-text-color:     #757575;
+        --disabled-text-color:      #BDBDBD;
+        --divider-color:            #BDBDBD;
         display: block;
       }
       app-header {
         color: #fff;
-        background-color: var(--app-primary-color);
-      }
-      paper-fab {
-        position: absolute;
-        top: 32px;
-        right: 32px;
+        background-color: var(--primary-color);
       }
     </style>
 
@@ -45,7 +50,7 @@ class ClientApp extends PolymerElement {
 
       <app-header reveals>
         <app-toolbar>
-          <div main-title="">Message client</div>
+          <div main-title="">Messages</div>
         </app-toolbar>
       </app-header>
 
@@ -110,8 +115,6 @@ class ClientApp extends PolymerElement {
         _this.$[page].routeActivated();
       });
     }
-    // window.history.pushState({}, null, [ClientGlobals.rootPath, page, this.messageId].join('/'));
-    // window.dispatchEvent(new CustomEvent('location-changed'));
   }
 
   newMsg() {

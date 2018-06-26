@@ -31,7 +31,10 @@ class ClientEdit extends PolymerElement {
       </iron-ajax>
 
       <div class="card">
-        <h2>Edit message</h2>
+        <div class="card-header">
+          <h2>Edit message</h2>
+          <paper-button on-tap="delete" raised>Delete message</paper-button>
+        </div>
         <iron-form id="form">
           <form>
             <paper-input 
@@ -42,13 +45,17 @@ class ClientEdit extends PolymerElement {
               maxlength="50"
               required>
             </paper-input>
-            <paper-textarea label="Body" value="{{message.body}}"></paper-textarea>
+            <paper-textarea 
+              label="Body" 
+              value="{{message.body}}"
+              maxlength="500"
+              char-counter>
+            </paper-textarea>
           </form>
         </iron-form>
         <div class="buttons">
-          <paper-button on-tap="abort">Abort</paper-button>
+          <paper-button on-tap="goBack">Cancel</paper-button>
           <paper-button on-tap="save">Save</paper-button>
-          <paper-button on-tap="delete">Delete</paper-button>
         </div>
       </div>
     `;
@@ -86,7 +93,7 @@ class ClientEdit extends PolymerElement {
     req.then(function(data) {
       _this.dispatchEvent(new CustomEvent('refresh-list', 
         { detail: { message: 'Message saved'}}));
-      _this.abort();
+      _this.goBack();
     });
   }
 
@@ -99,11 +106,11 @@ class ClientEdit extends PolymerElement {
     req.then(function(data) {
       _this.dispatchEvent(new CustomEvent('refresh-list',
         { detail: { message: 'Message deleted'}}));
-      _this.abort();
+      _this.goBack();
     });
   }
 
-  abort() {
+  goBack() {
     window.history.pushState({}, null, ClientGlobals.rootPath + 'list');
     window.dispatchEvent(new CustomEvent('location-changed'));
   }

@@ -41,7 +41,7 @@ class ClientNew extends PolymerElement {
           </form>
         </iron-form>
         <div class="buttons">
-          <paper-button on-tap="abort">Abort</paper-button>
+          <paper-button on-tap="goBack">Cancel</paper-button>
           <paper-button on-tap="send">Send</paper-button>
         </div>
       </div>
@@ -67,11 +67,11 @@ class ClientNew extends PolymerElement {
     req.then(function(data) {
       _this.dispatchEvent(new CustomEvent('refresh-list',
         { detail: { message: 'Message sent'}}));
-      _this.abort();
+      _this.goBack();
     });
   }
 
-  abort() {
+  goBack() {
     window.history.pushState({}, null, ClientGlobals.rootPath + 'list');
     window.dispatchEvent(new CustomEvent('location-changed'));
   }

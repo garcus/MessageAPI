@@ -16,12 +16,14 @@ class ClientList extends PolymerElement {
           display: block;
         }
         paper-fab {
+          --paper-fab-background: var(--accent-color);
           position: absolute;
           bottom: 32px;
           right: 32px;
         }
         paper-item {
           cursor: pointer;
+          border-bottom: 1px solid var(--divider-color);
         }
       </style>
 
@@ -38,8 +40,8 @@ class ClientList extends PolymerElement {
 
       <dom-repeat items="[[messages]]">
         <template>
-          <paper-item on-tap="edit">
-            <paper-item-body two-line>
+          <paper-item>
+            <paper-item-body two-line on-tap="edit">
               <div>[[item.title]]</div>
               <div secondary>[[item.body]]</div>
             </paper-item-body>
