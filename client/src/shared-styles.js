@@ -20,7 +20,9 @@ $_documentContainer.innerHTML = `<dom-module id="shared-styles">
       }
 
       .buttons {
-        
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-end;
       }
     </style>
   </template>
