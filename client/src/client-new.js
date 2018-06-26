@@ -1,4 +1,6 @@
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
+import '@polymer/iron-form/iron-form.js';
+import '@polymer/iron-ajax/iron-ajax.js';
 import '@polymer/paper-button/paper-button.js';
 import '@polymer/paper-input/paper-input.js';
 import '@polymer/paper-input/paper-textarea.js';
@@ -14,19 +16,25 @@ class ClientNew extends PolymerElement {
         }
       </style>
 
-      <div class="card">
-        <paper-input 
-          label="Title" 
-          value="{{message.Title}}"
-          char-counter
-          maxlength="50"
-          required>
-        </paper-input>
-        <paper-textarea label="Body" value="{{message.Body}}"></paper-textarea>
 
+      <div class="card">
+        <h2>Compose new message</h2>
+        <iron-form id="form">
+          <form>
+            <paper-input 
+              label="Title" 
+              value="{{message.Title}}"
+              char-counter
+              maxlength="50"
+              error-message="This is a required field"
+              required>
+            </paper-input>
+            <paper-textarea label="Body" value="{{message.Body}}"></paper-textarea>
+          </form>
+        </iron-form>
         <div class="buttons">
           <paper-button on-tap="abort">Abort</paper-button>
-          <paper-button on-tap="submit">Submit</paper-button>
+          <paper-button on-tap="send">Send</paper-button>
         </div>
       </div>
     `;
@@ -40,6 +48,10 @@ class ClientNew extends PolymerElement {
 
   routeActivated() {
     this.set('message', { Title: '', Body: ''});
+  }
+
+  send() {
+    if(!this.$.form.validate()) { return; }
   }
 
   abort() {

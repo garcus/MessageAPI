@@ -11,6 +11,7 @@
     "@polymer/iron-iconset-svg": "^3.0.0-pre.21",
     "@polymer/iron-pages": "^3.0.0-pre.21",
     "@polymer/iron-ajax": "^3.0.0-pre.21",
+    "@polymer/iron-form": "^3.0.0-pre.21",
     "@polymer/polymer": "^3.0.0"
   },
   "devDependencies": {

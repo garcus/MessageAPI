@@ -1,5 +1,6 @@
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import '@polymer/iron-ajax/iron-ajax.js';
+import '@polymer/iron-form/iron-form.js';
 import '@polymer/paper-button/paper-button.js';
 import '@polymer/paper-input/paper-input.js';
 import '@polymer/paper-input/paper-textarea.js';
@@ -30,18 +31,23 @@ class ClientEdit extends PolymerElement {
       </iron-ajax>
 
       <div class="card">
-        <paper-input 
-          label="Title" 
-          value="{{message.title}}"
-          char-counter
-          maxlength="50"
-          required>
-        </paper-input>
-        <paper-textarea label="Body" value="{{message.body}}"></paper-textarea>
-
+        <h2>Edit message</h2>
+        <iron-form id="form">
+          <form>
+            <paper-input 
+              label="Title" 
+              value="{{message.title}}"
+              char-counter
+              error-message="This is a required field"
+              maxlength="50"
+              required>
+            </paper-input>
+            <paper-textarea label="Body" value="{{message.body}}"></paper-textarea>
+          </form>
+        </iron-form>
         <div class="buttons">
           <paper-button on-tap="abort">Abort</paper-button>
-          <paper-button on-tap="submit">Submit</paper-button>
+          <paper-button on-tap="save">Save</paper-button>
         </div>
       </div>
     `;
@@ -65,6 +71,10 @@ class ClientEdit extends PolymerElement {
 
   handleResponse(e) {
     this.set('message', e.detail.response);
+  }
+
+  save() {
+    if(!this.$.form.validate()) { return; }
   }
 
   abort() {
