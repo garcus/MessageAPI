@@ -14,13 +14,6 @@
 
     <script>
       window.ClientGlobals = { rootPath: '/', api: 'http://localhost:5000/' };
-      if ('serviceWorker' in navigator) {
-        window.addEventListener('load', function() {
-          navigator.serviceWorker.register('service-worker.js', {
-            scope: ClientGlobals.rootPath
-          });
-        });
-      }
     </script>
 
     <script src="node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>

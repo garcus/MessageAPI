@@ -32,7 +32,6 @@ class ClientList extends PolymerElement {
       <iron-ajax id="ajax"
         headers="{'X-Requested-With': 'XMLHttpRequest', 'Access-Control-Allow-Origin': '*'}"
         content-type="application/json"
-        on-response="handleResponse"
         loading="{{loading}}">
       </iron-ajax>
 
@@ -70,11 +69,11 @@ class ClientList extends PolymerElement {
   routeActivated() { }
 
   refresh() {
-    this.$.ajax.generateRequest();
-  }
-
-  handleResponse(e) {
-    this.set('messages', e.detail.response);
+    var _this = this;
+    var req = this.$.ajax.generateRequest().completes;
+    req.then(function(data) {
+      _this.set('messages', data.response);
+    })
   }
 
   newMsg() {
