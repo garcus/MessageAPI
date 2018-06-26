@@ -1,10 +1,19 @@
 {
   "name": "client",
   "dependencies": {
+    "@polymer/app-layout": "^3.0.0-pre.21",
+    "@polymer/app-route": "^3.0.0-pre.21",
+    "@polymer/paper-fab": "^3.0.0-pre.21",
+    "@polymer/paper-button": "^3.0.0-pre.21",
+    "@polymer/paper-input": "^3.0.0-pre.21",
+    "@polymer/paper-item": "^3.0.0-pre.21",
+    "@polymer/paper-progress": "^3.0.0-pre.21",
+    "@polymer/iron-iconset-svg": "^3.0.0-pre.21",
+    "@polymer/iron-pages": "^3.0.0-pre.21",
+    "@polymer/iron-ajax": "^3.0.0-pre.21",
     "@polymer/polymer": "^3.0.0"
   },
   "devDependencies": {
-    "@webcomponents/webcomponentsjs": "^2.0.0",
-    "wct-browser-legacy": "^1.0.0"
+    "@webcomponents/webcomponentsjs": "^2.0.0"
   }
 }

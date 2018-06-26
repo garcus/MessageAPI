@@ -17,7 +17,7 @@ namespace Messages
     {
         public static void Main(string[] args)
         {
-            var host = CreateWebHostBuilder(args).Build();
+            var host = BuildWebHost(args);
             using (var scope = host.Services.CreateScope())
             {
                 var services = scope.ServiceProvider;
@@ -35,8 +35,9 @@ namespace Messages
             host.Run();
         }
 
-        public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
+        public static IWebHost BuildWebHost(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
-                .UseStartup<Startup>();
+                .UseStartup<Startup>()
+                .Build();
     }
 }

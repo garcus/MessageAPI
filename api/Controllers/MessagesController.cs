@@ -1,13 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Cors;
 using Messages.DataAccess.Models;
 using Messages.DataAccess.Repositories;
 
 namespace Messages.Controllers
 {
     [Route("api/[controller]")]
-    [ApiController]
+    [EnableCors("MyCorsPolicy")]
     public class MessagesController : Controller
     {
         private readonly MessagesRepository _msgRepo;
@@ -27,7 +28,7 @@ namespace Messages.Controllers
 
         #region GET api/messages/{id}
         [HttpGet("{id}")]
-        public ActionResult<Message> GetById(long id)
+        public IActionResult GetById(long id)
         {
             Message msg = null;
             try
@@ -38,7 +39,7 @@ namespace Messages.Controllers
             {
                 return NotFound();
             }
-           return msg;
+           return Ok(msg);
         }
         #endregion
 
