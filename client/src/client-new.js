@@ -37,7 +37,12 @@ class ClientNew extends PolymerElement {
               error-message="This is a required field"
               required>
             </paper-input>
-            <paper-textarea label="Body" value="{{message.Body}}"></paper-textarea>
+            <paper-textarea 
+              label="Body" 
+              value="{{message.body}}"
+              maxlength="500"
+              char-counter>
+            </paper-textarea>
           </form>
         </iron-form>
         <div class="buttons">
