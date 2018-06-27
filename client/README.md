@@ -4,10 +4,15 @@
 
 First, make sure you have the [Polymer CLI](https://www.npmjs.com/package/polymer-cli) installed. Then run `polymer serve` to serve your application locally.
 
+You should preferably also run the LTS version (8.x) och Node.js. Before being able to start application you need to do:
+```
+$ npm install
+```
+
 ## Viewing Your Application
 
 ```
-$ polymer serve
+$ polymer serve --npm
 ```
 
 ## Building Your Application
