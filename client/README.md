@@ -17,6 +17,8 @@ $ npm install
 $ polymer serve --npm
 ```
 
+Client is hard coded to message api `http://localhost:5000/` in `index.html`.
+
 ## Building Your Application
 
 ```
