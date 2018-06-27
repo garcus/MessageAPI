@@ -1,6 +1,4 @@
-# \<client\>
-
-
+# Web client
 
 ## Install the Polymer-CLI
 
