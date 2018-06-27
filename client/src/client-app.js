@@ -48,6 +48,12 @@ class ClientApp extends PolymerElement {
       app-toolbar iron-icon {
         padding: 8px;
       }
+      .servertag {
+        color: var(--light-primary-color);
+        text-align: right;
+        padding-right: 16px;
+        font-size: 14px;
+      }
     </style>
 
       <app-location route="{{route}}" url-space-regex="^[[rootPath]]"></app-location>
@@ -59,6 +65,7 @@ class ClientApp extends PolymerElement {
           <iron-icon hidden$="[[!_frontpage(page)]]" icon="client-icons:mail"></iron-icon>
           <paper-icon-button hidden$="[[_frontpage(page)]]" icon="client-icons:arrow-back" on-tap="goHome"></paper-icon-button>
           <div main-title="">Messages</div>
+          <div bottom-item class="servertag">Message server: [[messageServer]]</div>
         </app-toolbar>
       </app-header>
 
@@ -83,11 +90,11 @@ class ClientApp extends PolymerElement {
         reflectToAttribute: true,
         observer: '_pageChanged'
       },
-      messageId: String,
+      subroute: Object,
       routeData: Object,
       subrouteData: Object,
-      subroute: Object,
-      toastMsg: String
+      toastMsg: String,
+      messageServer: String
     };
   }
 
@@ -96,6 +103,27 @@ class ClientApp extends PolymerElement {
       '_routePageChanged(routeData.page)'
     ];
   }
+
+  ready() {
+    super.ready();
+    this.set('messageServer', window.ClientGlobals.api);
+  }
+
+  goHome() {
+    window.history.pushState({}, null, ClientGlobals.rootPath + 'list');
+    window.dispatchEvent(new CustomEvent('location-changed'));
+  }
+
+  openToast(msg) {
+    if (typeof(msg) !== 'undefined') {
+      this.set('toastMsg', msg);
+      this.$.toast.open();
+    }
+  }
+
+  /*
+   * Page navigation monitors
+   */
   _routePageChanged(page) {
     if (!page) {
       this.page = 'list';
@@ -114,7 +142,7 @@ class ClientApp extends PolymerElement {
         importPromise = import('./client-list.js');
         break;
       case 'edit':
-        importPromise = import('./client-edit');
+        importPromise = import('./client-edit.js');
         break;
       case 'new':
         importPromise = import('./client-new.js');
@@ -130,10 +158,9 @@ class ClientApp extends PolymerElement {
     }
   }
 
-  newMsg() {
-    this.set('page', 'new');
-  }
-
+  /* 
+   *Event handlers
+   */
   refresh(e) {
     this.$.list.refresh();
     this.openToast(e.detail.message);
@@ -143,20 +170,8 @@ class ClientApp extends PolymerElement {
     this.openToast(e.detail.message);
   }
 
-  openToast(msg) {
-    if (typeof(msg) !== 'undefined') {
-      this.set('toastMsg', msg);
-      this.$.toast.open();
-    }
-  }
-
   _frontpage(page) {
     return (page === '' || page === 'list');
-  }
-
-  goHome() {
-    window.history.pushState({}, null, ClientGlobals.rootPath + 'list');
-    window.dispatchEvent(new CustomEvent('location-changed'));
   }
 }
 

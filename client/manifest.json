@@ -1,6 +1,6 @@
 {
-  "name": "client",
-  "short_name": "client",
+  "name": "webclient",
+  "short_name": "webclient",
   "start_url": "/",
   "display": "standalone"
 }

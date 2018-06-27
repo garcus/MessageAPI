@@ -82,10 +82,6 @@ class ClientNew extends PolymerElement {
     window.dispatchEvent(new CustomEvent('location-changed'));
   }
 
-  submit(e) {
-    console.log("Submit");
-  }
-
   errorHandler(e) {
     var msg = (e.detail.request.status === 0) ? 'Unable to reach server' : e.detail.request.statusText;
     this.dispatchEvent(new CustomEvent('message-error',
