@@ -21,6 +21,7 @@ class ClientNew extends PolymerElement {
         headers="{'X-Requested-With': 'XMLHttpRequest', 'Access-Control-Allow-Origin': '*'}"
         handle-as="json"
         content-type="application/json"
+        on-error="errorHandler"
         on-response="handleResponse"
         loading="{{loading}}">
       </iron-ajax>
@@ -83,6 +84,12 @@ class ClientNew extends PolymerElement {
 
   submit(e) {
     console.log("Submit");
+  }
+
+  errorHandler(e) {
+    var msg = (e.detail.request.status === 0) ? 'Unable to reach server' : e.detail.request.statusText;
+    this.dispatchEvent(new CustomEvent('message-error',
+      { detail: { message: 'Error : ' + msg}}));
   }
 }
 

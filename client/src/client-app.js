@@ -5,7 +5,10 @@ import '@polymer/app-route/app-route.js';
 import '@polymer/app-layout/app-toolbar/app-toolbar.js';
 import '@polymer/app-layout/app-header/app-header.js';
 import '@polymer/iron-pages/iron-pages.js';
+import '@polymer/iron-icon/iron-icon.js';
 import '@polymer/paper-toast/paper-toast.js';
+import '@polymer/paper-icon-button/paper-icon-button.js';
+import './client-icons.js';
 
 // Gesture events like tap and track generated from touch will not be
 // preventable, allowing for better scrolling performance.
@@ -42,6 +45,9 @@ class ClientApp extends PolymerElement {
         color: #fff;
         background-color: var(--primary-color);
       }
+      app-toolbar iron-icon {
+        padding: 8px;
+      }
     </style>
 
       <app-location route="{{route}}" url-space-regex="^[[rootPath]]"></app-location>
@@ -50,6 +56,8 @@ class ClientApp extends PolymerElement {
 
       <app-header reveals>
         <app-toolbar>
+          <iron-icon hidden$="[[!_frontpage(page)]]" icon="client-icons:mail"></iron-icon>
+          <paper-icon-button hidden$="[[_frontpage(page)]]" icon="client-icons:arrow-back" on-tap="goHome"></paper-icon-button>
           <div main-title="">Messages</div>
         </app-toolbar>
       </app-header>
@@ -57,7 +65,12 @@ class ClientApp extends PolymerElement {
       <iron-pages selected="[[page]]" attr-for-selected="id" role="main">
         <client-list id="list"></client-list>
         <client-new id="new" on-refresh-list="refresh"></client-new>
-        <client-edit id="edit" message-id="[[subrouteData.messageId]]" on-refresh-list="refresh"></client-edit>
+        <client-edit id="edit" 
+          message-id="[[subrouteData.messageId]]" 
+          on-message-error="error"
+          on-refresh-list="refresh">
+        </client-edit>
+        <client-404 id="404"></client-404>
       </iron-pages>
       <paper-toast id="toast" text="[[toastMsg]]"></paper-toast>
     `;
@@ -123,10 +136,27 @@ class ClientApp extends PolymerElement {
 
   refresh(e) {
     this.$.list.refresh();
-    if (typeof(e.detail.message) !== 'undefined') {
-      this.set('toastMsg', e.detail.message);
+    this.openToast(e.detail.message);
+  }
+
+  error(e) {
+    this.openToast(e.detail.message);
+  }
+
+  openToast(msg) {
+    if (typeof(msg) !== 'undefined') {
+      this.set('toastMsg', msg);
       this.$.toast.open();
     }
+  }
+
+  _frontpage(page) {
+    return (page === '' || page === 'list');
+  }
+
+  goHome() {
+    window.history.pushState({}, null, ClientGlobals.rootPath + 'list');
+    window.dispatchEvent(new CustomEvent('location-changed'));
   }
 }
 

@@ -27,6 +27,7 @@ class ClientEdit extends PolymerElement {
         headers="{'X-Requested-With': 'XMLHttpRequest', 'Access-Control-Allow-Origin': '*'}"
         content-type="application/json"
         handle-as="json"
+        on-error="errorHandler"
         loading="{{loading}}">
       </iron-ajax>
 
@@ -113,6 +114,18 @@ class ClientEdit extends PolymerElement {
   goBack() {
     window.history.pushState({}, null, ClientGlobals.rootPath + 'list');
     window.dispatchEvent(new CustomEvent('location-changed'));
+  }
+
+  errorHandler(e) {
+    if (e.detail.request.status === 404) {
+      window.history.pushState({}, null, ClientGlobals.rootPath + '404');
+      window.dispatchEvent(new CustomEvent('location-changed'));
+    }
+    else {
+      var msg = (e.detail.request.status === 0) ? 'Unable to reach server' : e.detail.request.statusText;
+      this.dispatchEvent(new CustomEvent('message-error',
+        { detail: { message: 'Error : ' + msg}}));
+    }
   }
 }
 
